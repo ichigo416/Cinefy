@@ -17,9 +17,6 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     MovieDetailsFetchEvent event,
     Emitter<MovieDetailsState> emit,
   ) async {
-    // If the movie was already passed via navigation (extra), show it
-    // immediately while we refresh details in the background — avoids
-    // a loading flicker when coming from the home screen's movie card.
     if (event.initialMovie != null) {
       emit(MovieDetailsLoaded(event.initialMovie!));
     } else {
@@ -30,7 +27,6 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
 
     result.fold(
       (failure) {
-        // Only surface the error if we have nothing to show at all
         if (event.initialMovie == null) {
           emit(MovieDetailsError(failure.message));
         }
