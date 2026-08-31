@@ -1,5 +1,5 @@
-import '../../domain/entities/movie.dart';
-import '../models/movie_model.dart';
+import '../../../domain/entities/movie.dart';
+import '../../models/movie_model.dart';
 
 // This datasource returns hardcoded mock data so the UI works
 // without a backend. Swap fetchNowShowing/fetchComingSoon with
@@ -7,7 +7,6 @@ import '../models/movie_model.dart';
 
 class MovieRemoteDatasource {
   Future<List<MovieModel>> fetchNowShowing({String? city}) async {
-    // Simulate network latency
     await Future.delayed(const Duration(milliseconds: 800));
     return _nowShowingMovies;
   }
@@ -19,17 +18,25 @@ class MovieRemoteDatasource {
 
   Future<MovieModel> fetchMovieDetails(String movieId) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    final movie = [..._nowShowingMovies, ..._comingSoonMovies]
-        .firstWhere((m) => m.id == movieId);
+
+    final movie = [..._nowShowingMovies, ..._comingSoonMovies].firstWhere(
+      (m) => m.id == movieId,
+    );
+
     return movie;
   }
 
   Future<List<MovieModel>> searchMovies(String query) async {
     await Future.delayed(const Duration(milliseconds: 400));
+
     final q = query.toLowerCase();
+
     return [..._nowShowingMovies, ..._comingSoonMovies]
-        .where((m) => m.title.toLowerCase().contains(q) ||
-            m.genres.any((g) => g.toLowerCase().contains(q)))
+        .where(
+          (m) =>
+              m.title.toLowerCase().contains(q) ||
+              m.genres.any((g) => g.toLowerCase().contains(q)),
+        )
         .toList();
   }
 }
@@ -58,10 +65,29 @@ final List<MovieModel> _nowShowingMovies = [
     releaseDate: DateTime(2024, 6, 27),
     isNowShowing: true,
     cast: [
-      const CastMember(id: 'c1', name: 'Prabhas', role: 'Actor', character: 'Kalki'),
-      const CastMember(id: 'c2', name: 'Deepika Padukone', role: 'Actress', character: 'Sumathi'),
-      const CastMember(id: 'c3', name: 'Amitabh Bachchan', role: 'Actor', character: 'Ashwatthama'),
-      const CastMember(id: 'c4', name: 'Nag Ashwin', role: 'Director'),
+      const CastMember(
+        id: 'c1',
+        name: 'Prabhas',
+        role: 'Actor',
+        character: 'Kalki',
+      ),
+      const CastMember(
+        id: 'c2',
+        name: 'Deepika Padukone',
+        role: 'Actress',
+        character: 'Sumathi',
+      ),
+      const CastMember(
+        id: 'c3',
+        name: 'Amitabh Bachchan',
+        role: 'Actor',
+        character: 'Ashwatthama',
+      ),
+      const CastMember(
+        id: 'c4',
+        name: 'Nag Ashwin',
+        role: 'Director',
+      ),
     ],
   ),
   MovieModel(
@@ -83,9 +109,23 @@ final List<MovieModel> _nowShowingMovies = [
     releaseDate: DateTime(2024, 8, 15),
     isNowShowing: true,
     cast: [
-      const CastMember(id: 'c5', name: 'Rajkummar Rao', role: 'Actor', character: 'Vicky'),
-      const CastMember(id: 'c6', name: 'Shraddha Kapoor', role: 'Actress', character: 'Stree'),
-      const CastMember(id: 'c7', name: 'Amar Kaushik', role: 'Director'),
+      const CastMember(
+        id: 'c5',
+        name: 'Rajkummar Rao',
+        role: 'Actor',
+        character: 'Vicky',
+      ),
+      const CastMember(
+        id: 'c6',
+        name: 'Shraddha Kapoor',
+        role: 'Actress',
+        character: 'Stree',
+      ),
+      const CastMember(
+        id: 'c7',
+        name: 'Amar Kaushik',
+        role: 'Director',
+      ),
     ],
   ),
   MovieModel(
@@ -107,9 +147,23 @@ final List<MovieModel> _nowShowingMovies = [
     releaseDate: DateTime(2024, 12, 5),
     isNowShowing: true,
     cast: [
-      const CastMember(id: 'c8', name: 'Allu Arjun', role: 'Actor', character: 'Pushpa Raj'),
-      const CastMember(id: 'c9', name: 'Rashmika Mandanna', role: 'Actress', character: 'Srivalli'),
-      const CastMember(id: 'c10', name: 'Sukumar', role: 'Director'),
+      const CastMember(
+        id: 'c8',
+        name: 'Allu Arjun',
+        role: 'Actor',
+        character: 'Pushpa Raj',
+      ),
+      const CastMember(
+        id: 'c9',
+        name: 'Rashmika Mandanna',
+        role: 'Actress',
+        character: 'Srivalli',
+      ),
+      const CastMember(
+        id: 'c10',
+        name: 'Sukumar',
+        role: 'Director',
+      ),
     ],
   ),
   MovieModel(
@@ -129,9 +183,23 @@ final List<MovieModel> _nowShowingMovies = [
     releaseDate: DateTime(2024, 11, 1),
     isNowShowing: true,
     cast: [
-      const CastMember(id: 'c11', name: 'Kartik Aaryan', role: 'Actor', character: 'Rooh Baba'),
-      const CastMember(id: 'c12', name: 'Vidya Balan', role: 'Actress', character: 'Manjulika'),
-      const CastMember(id: 'c13', name: 'Anees Bazmee', role: 'Director'),
+      const CastMember(
+        id: 'c11',
+        name: 'Kartik Aaryan',
+        role: 'Actor',
+        character: 'Rooh Baba',
+      ),
+      const CastMember(
+        id: 'c12',
+        name: 'Vidya Balan',
+        role: 'Actress',
+        character: 'Manjulika',
+      ),
+      const CastMember(
+        id: 'c13',
+        name: 'Anees Bazmee',
+        role: 'Director',
+      ),
     ],
   ),
   MovieModel(
@@ -151,9 +219,23 @@ final List<MovieModel> _nowShowingMovies = [
     releaseDate: DateTime(2024, 1, 25),
     isNowShowing: true,
     cast: [
-      const CastMember(id: 'c14', name: 'Hrithik Roshan', role: 'Actor', character: 'Patty'),
-      const CastMember(id: 'c15', name: 'Deepika Padukone', role: 'Actress', character: 'Minal'),
-      const CastMember(id: 'c16', name: 'Siddharth Anand', role: 'Director'),
+      const CastMember(
+        id: 'c14',
+        name: 'Hrithik Roshan',
+        role: 'Actor',
+        character: 'Patty',
+      ),
+      const CastMember(
+        id: 'c15',
+        name: 'Deepika Padukone',
+        role: 'Actress',
+        character: 'Minal',
+      ),
+      const CastMember(
+        id: 'c16',
+        name: 'Siddharth Anand',
+        role: 'Director',
+      ),
     ],
   ),
 ];
@@ -176,8 +258,17 @@ final List<MovieModel> _comingSoonMovies = [
     releaseDate: DateTime(2025, 4, 10),
     isNowShowing: false,
     cast: [
-      const CastMember(id: 'c17', name: 'Ajay Devgn', role: 'Actor', character: 'Singham'),
-      const CastMember(id: 'c18', name: 'Rohit Shetty', role: 'Director'),
+      const CastMember(
+        id: 'c17',
+        name: 'Ajay Devgn',
+        role: 'Actor',
+        character: 'Singham',
+      ),
+      const CastMember(
+        id: 'c18',
+        name: 'Rohit Shetty',
+        role: 'Director',
+      ),
     ],
   ),
   MovieModel(
@@ -197,8 +288,16 @@ final List<MovieModel> _comingSoonMovies = [
     releaseDate: DateTime(2025, 1, 24),
     isNowShowing: false,
     cast: [
-      const CastMember(id: 'c19', name: 'Akshay Kumar', role: 'Actor'),
-      const CastMember(id: 'c20', name: 'Abhishek Anil Kapur', role: 'Director'),
+      const CastMember(
+        id: 'c19',
+        name: 'Akshay Kumar',
+        role: 'Actor',
+      ),
+      const CastMember(
+        id: 'c20',
+        name: 'Abhishek Anil Kapur',
+        role: 'Director',
+      ),
     ],
   ),
 ];
