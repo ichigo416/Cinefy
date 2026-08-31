@@ -1,5 +1,4 @@
 import '../../domain/entities/booking.dart';
-import '../../domain/entities/seat.dart';
 import 'seat_model.dart';
 
 class BookingModel extends Booking {
