@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+
 import '../../core/errors/failures.dart';
 import '../../domain/entities/movie.dart';
-import '../../domain/repositories/repositories.dart';
+import '../../domain/repositories/movie_repository.dart';
 import '../datasources/remote/movie_remote_datasource.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
@@ -10,7 +11,9 @@ class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl(this._remote);
 
   @override
-  Future<Either<Failure, List<Movie>>> getNowShowing({String? city}) async {
+  Future<Either<Failure, List<Movie>>> getNowShowing({
+    String? city,
+  }) async {
     try {
       final movies = await _remote.fetchNowShowing(city: city);
       return Right(movies);
@@ -18,13 +21,15 @@ class MovieRepositoryImpl implements MovieRepository {
       return Left(NetworkFailure(e.message));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message, e.statusCode));
-    } catch (e) {
+    } catch (_) {
       return const Left(UnknownFailure());
     }
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getComingSoon({String? city}) async {
+  Future<Either<Failure, List<Movie>>> getComingSoon({
+    String? city,
+  }) async {
     try {
       final movies = await _remote.fetchComingSoon(city: city);
       return Right(movies);
@@ -32,13 +37,15 @@ class MovieRepositoryImpl implements MovieRepository {
       return Left(NetworkFailure(e.message));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message, e.statusCode));
-    } catch (e) {
+    } catch (_) {
       return const Left(UnknownFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Movie>> getMovieDetails(String movieId) async {
+  Future<Either<Failure, Movie>> getMovieDetails(
+    String movieId,
+  ) async {
     try {
       final movie = await _remote.fetchMovieDetails(movieId);
       return Right(movie);
@@ -46,20 +53,22 @@ class MovieRepositoryImpl implements MovieRepository {
       return Left(NotFoundFailure(e.message));
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
-    } catch (e) {
+    } catch (_) {
       return const Left(UnknownFailure());
     }
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> searchMovies(String query) async {
+  Future<Either<Failure, List<Movie>>> searchMovies(
+    String query,
+  ) async {
     try {
       final movies = await _remote.searchMovies(query);
       return Right(movies);
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
-    } catch (e) {
+    } catch (_) {
       return const Left(UnknownFailure());
     }
   }
-} 
+}
