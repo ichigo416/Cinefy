@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (_, __) => FadeTransition(
+          builder: (_, _) => FadeTransition(
             opacity: _fadeAnim,
             child: ScaleTransition(
               scale: _scaleAnim,
@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
                     text: const TextSpan(
                       children: [
                         TextSpan(
-                          text: 'book',
+                          text: 'Cin',
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Gilroy',
@@ -88,18 +88,9 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ),
                         TextSpan(
-                          text: 'my',
+                          text: 'efy',
                           style: TextStyle(
                             color: AppColors.primary,
-                            fontFamily: 'Gilroy',
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'show',
-                          style: TextStyle(
-                            color: Colors.white,
                             fontFamily: 'Gilroy',
                             fontSize: 28,
                             fontWeight: FontWeight.w700,
@@ -110,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Movies • Events • Plays • Sports',
+                    'Movies',
                     style: TextStyle(
                       color: AppColors.textHint,
                       fontFamily: 'Gilroy',

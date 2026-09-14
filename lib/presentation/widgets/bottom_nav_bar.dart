@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 
@@ -55,8 +57,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   void _onTap(int index) {
     if (index == widget.currentIndex) return;
-    // In a real setup, use GoRouter's go() here
-    // context.go(_routes[index]);
+    context.go(_routes[index]);
   }
 
   @override
@@ -71,7 +72,7 @@ class _MainScaffoldState extends State<MainScaffold> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 16,
               offset: const Offset(0, -4),
             ),
@@ -135,7 +136,7 @@ class _NavBarItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: isActive
-                  ? AppColors.primary.withOpacity(0.12)
+                  ? AppColors.primary.withValues(alpha: 0.12)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
             ),
@@ -158,5 +159,5 @@ class _NavBarItem extends StatelessWidget {
         ],
       ),
     );
-  }
+    }
 } 
