@@ -171,7 +171,7 @@ class AppTheme {
       // Chip
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.surfaceLight,
-        selectedColor: AppColors.primary.withOpacity(0.2),
+        selectedColor: AppColors.primary.withValues(alpha: 0.2),
         labelStyle: const TextStyle(
           fontFamily: 'Gilroy',
           fontSize: 13,

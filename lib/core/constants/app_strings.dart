@@ -1,7 +1,7 @@
 class AppStrings {
   AppStrings._();
 
-  static const String appName = 'BookMyShow';
+  static const String appName = 'Cinefy';
 
   // Auth
   static const String login = 'Login';
@@ -24,6 +24,13 @@ class AppStrings {
   static const String topPicks = 'Top Picks';
   static const String searchHint = 'Movies, Events, Plays, Sports';
 
+  // Search
+  static const String searchPromptTitle = 'Search for movies';
+  static const String searchPromptSubtitle = 'Explore by title or genre';
+  static const String noResultsFound = 'No results found';
+  static const String searchNoResultsHint =
+      'Check the spelling or try a different keyword';
+
   // Categories
   static const String movies = 'Movies';
   static const String events = 'Events';
@@ -34,8 +41,12 @@ class AppStrings {
   // Movie
   static const String bookTickets = 'Book Tickets';
   static const String watchTrailer = 'Watch Trailer';
+  static const String back = 'Back';
   static const String cast = 'Cast & Crew';
   static const String synopsis = 'Synopsis';
+  static const String availableIn = 'Available in';
+  static const String nowShowingInCinemas = 'Now Showing in cinemas';
+  static const String releasingOn = 'Releasing on';
   static const String reviews = 'Reviews';
   static const String critic = 'Critic Reviews';
   static const String readMore = 'Read More';

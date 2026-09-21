@@ -4,7 +4,7 @@ class AppColors {
   AppColors._();
 
   // Brand
-  static const Color primary = Color(0xFFE63946);      // BMS red
+  static const Color primary = Color(0xFFE63946);      // Cinefy red
   static const Color primaryDark = Color(0xFFC1121F);
   static const Color primaryLight = Color(0xFFFF6B6B);
 
