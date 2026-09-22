@@ -1,8 +1,15 @@
+import '../../../services/api_service.dart';
 import '../../models/theatre_model.dart';
 import '../../models/show_model.dart';
 import '../../../domain/entities/theatre.dart';
 
 class TheatreRemoteDatasource {
+  final ApiService _api;
+  final bool mockEnabled;
+
+  TheatreRemoteDatasource([ApiService? api, this.mockEnabled = true])
+    : _api = api ?? ApiService();
+
   Future<List<TheatreModel>> fetchTheatresForMovie({
     required String movieId,
     required String city,
@@ -10,13 +17,15 @@ class TheatreRemoteDatasource {
     String? language,
     String? format,
   }) async {
-    await Future.delayed(const Duration(milliseconds: 700));
+    if (mockEnabled) {
+      await Future.delayed(const Duration(milliseconds: 700));
 
-    var theatres = _mockTheatres(movieId, date);
+      var theatres = _mockTheatres(movieId, date);
 
-    if (language != null) {
-      theatres = theatres
-          .map((t) => TheatreModel(
+      if (language != null) {
+        theatres = theatres
+            .map(
+              (t) => TheatreModel(
                 id: t.id,
                 name: t.name,
                 address: t.address,
@@ -25,14 +34,16 @@ class TheatreRemoteDatasource {
                 rating: t.rating,
                 amenities: t.amenities,
                 shows: t.shows.where((s) => s.language == language).toList(),
-              ))
-          .where((t) => t.shows.isNotEmpty)
-          .toList();
-    }
+              ),
+            )
+            .where((t) => t.shows.isNotEmpty)
+            .toList();
+      }
 
-    if (format != null) {
-      theatres = theatres
-          .map((t) => TheatreModel(
+      if (format != null) {
+        theatres = theatres
+            .map(
+              (t) => TheatreModel(
                 id: t.id,
                 name: t.name,
                 address: t.address,
@@ -41,12 +52,29 @@ class TheatreRemoteDatasource {
                 rating: t.rating,
                 amenities: t.amenities,
                 shows: t.shows.where((s) => s.format == format).toList(),
-              ))
-          .where((t) => t.shows.isNotEmpty)
-          .toList();
+              ),
+            )
+            .where((t) => t.shows.isNotEmpty)
+            .toList();
+      }
+
+      return theatres;
     }
 
-    return theatres;
+    final response = await _api.get(
+      '/movies/$movieId/theatres',
+      queryParams: {
+        'city': city,
+        'date': date.toIso8601String(),
+        'language': language,
+        'format': format,
+      }..removeWhere((key, value) => value == null),
+    );
+
+    final items = response.data['theatres'] as List;
+    return items
+        .map((json) => TheatreModel.fromJson(json as Map<String, dynamic>))
+        .toList();
   }
 
   List<TheatreModel> _mockTheatres(String movieId, DateTime date) {
@@ -66,7 +94,12 @@ class TheatreRemoteDatasource {
         city: 'Bengaluru',
         distanceKm: 2.4,
         rating: 4.3,
-        amenities: const ['M-Ticket', 'Food & Beverage', 'Parking', 'Wheelchair Access'],
+        amenities: const [
+          'M-Ticket',
+          'Food & Beverage',
+          'Parking',
+          'Wheelchair Access',
+        ],
         shows: List.generate(baseTimes.length, (i) {
           final availability = [120, 40, 8, 0, 95][i % 5];
           return ShowModel(
@@ -78,7 +111,9 @@ class TheatreRemoteDatasource {
             format: i == 2 ? 'IMAX 3D' : '2D',
             status: availability == 0
                 ? ShowStatus.soldOut
-                : (availability < 20 ? ShowStatus.almostFull : ShowStatus.available),
+                : (availability < 20
+                      ? ShowStatus.almostFull
+                      : ShowStatus.available),
             totalSeats: 150,
             availableSeats: availability,
             basePrice: i == 2 ? 380 : 220,
@@ -104,7 +139,9 @@ class TheatreRemoteDatasource {
             format: '2D',
             status: availability == 0
                 ? ShowStatus.soldOut
-                : (availability < 20 ? ShowStatus.almostFull : ShowStatus.available),
+                : (availability < 20
+                      ? ShowStatus.almostFull
+                      : ShowStatus.available),
             totalSeats: 130,
             availableSeats: availability,
             basePrice: 200,
@@ -118,7 +155,12 @@ class TheatreRemoteDatasource {
         city: 'Bengaluru',
         distanceKm: 7.8,
         rating: 4.5,
-        amenities: const ['M-Ticket', 'Food & Beverage', 'Parking', 'Recliner Seats'],
+        amenities: const [
+          'M-Ticket',
+          'Food & Beverage',
+          'Parking',
+          'Recliner Seats',
+        ],
         shows: List.generate(baseTimes.length, (i) {
           final availability = [200, 150, 60, 25, 5][i % 5];
           return ShowModel(
@@ -130,7 +172,9 @@ class TheatreRemoteDatasource {
             format: i == 4 ? '4DX' : '2D',
             status: availability == 0
                 ? ShowStatus.soldOut
-                : (availability < 20 ? ShowStatus.almostFull : ShowStatus.available),
+                : (availability < 20
+                      ? ShowStatus.almostFull
+                      : ShowStatus.available),
             totalSeats: 220,
             availableSeats: availability,
             basePrice: i == 4 ? 450 : 240,

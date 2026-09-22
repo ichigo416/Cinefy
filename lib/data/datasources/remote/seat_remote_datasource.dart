@@ -1,15 +1,28 @@
 import 'dart:math';
-import '../../models/seat_model.dart';
+
 import '../../../domain/entities/seat.dart';
+import '../../../services/api_service.dart';
+import '../../models/seat_model.dart';
 
 class SeatRemoteDatasource {
+  final ApiService _api;
+  final bool mockEnabled;
+
+  SeatRemoteDatasource([ApiService? api, this.mockEnabled = true])
+    : _api = api ?? ApiService();
+
   Future<SeatLayoutModel> fetchSeatLayout(String showId) async {
-    await Future.delayed(const Duration(milliseconds: 600));
-    return _generateLayout(showId);
+    if (mockEnabled) {
+      await Future.delayed(const Duration(milliseconds: 600));
+      return _generateLayout(showId);
+    }
+
+    final response = await _api.get('/shows/$showId/seats');
+    return SeatLayoutModel.fromJson(
+      response.data['layout'] as Map<String, dynamic>,
+    );
   }
 
-  // Generates a realistic layout: recliner row at back, premium in middle,
-  // normal seats in front — with a few random seats pre-booked.
   SeatLayoutModel _generateLayout(String showId) {
     final random = Random(showId.hashCode); // deterministic per show
     final rowLabels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];

@@ -1,42 +1,82 @@
 import '../../../domain/entities/movie.dart';
+import '../../../services/api_service.dart';
 import '../../models/movie_model.dart';
 
-// This datasource returns hardcoded mock data so the UI works
-// without a backend. Swap fetchNowShowing/fetchComingSoon with
-// real API calls when your backend is ready.
-
 class MovieRemoteDatasource {
+  final ApiService _api;
+  final bool mockEnabled;
+
+  MovieRemoteDatasource([ApiService? api, this.mockEnabled = true])
+    : _api = api ?? ApiService();
+
   Future<List<MovieModel>> fetchNowShowing({String? city}) async {
-    await Future.delayed(const Duration(milliseconds: 800));
-    return _nowShowingMovies;
+    if (mockEnabled) {
+      await Future.delayed(const Duration(milliseconds: 800));
+      return _nowShowingMovies;
+    }
+
+    final response = await _api.get(
+      '/movies/now-showing',
+      queryParams: {if (city != null && city.isNotEmpty) 'city': city},
+    );
+
+    final items = response.data['movies'] as List;
+    return items
+        .map((json) => MovieModel.fromJson(json as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<MovieModel>> fetchComingSoon({String? city}) async {
-    await Future.delayed(const Duration(milliseconds: 600));
-    return _comingSoonMovies;
+    if (mockEnabled) {
+      await Future.delayed(const Duration(milliseconds: 600));
+      return _comingSoonMovies;
+    }
+
+    final response = await _api.get(
+      '/movies/coming-soon',
+      queryParams: {if (city != null && city.isNotEmpty) 'city': city},
+    );
+
+    final items = response.data['movies'] as List;
+    return items
+        .map((json) => MovieModel.fromJson(json as Map<String, dynamic>))
+        .toList();
   }
 
   Future<MovieModel> fetchMovieDetails(String movieId) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    if (mockEnabled) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      final movie = [
+        ..._nowShowingMovies,
+        ..._comingSoonMovies,
+      ].firstWhere((m) => m.id == movieId);
+      return movie;
+    }
 
-    final movie = [..._nowShowingMovies, ..._comingSoonMovies].firstWhere(
-      (m) => m.id == movieId,
-    );
-
-    return movie;
+    final response = await _api.get('/movies/$movieId');
+    return MovieModel.fromJson(response.data['movie'] as Map<String, dynamic>);
   }
 
   Future<List<MovieModel>> searchMovies(String query) async {
-    await Future.delayed(const Duration(milliseconds: 400));
+    if (mockEnabled) {
+      await Future.delayed(const Duration(milliseconds: 400));
+      final q = query.toLowerCase();
+      return [..._nowShowingMovies, ..._comingSoonMovies]
+          .where(
+            (m) =>
+                m.title.toLowerCase().contains(q) ||
+                m.genres.any((g) => g.toLowerCase().contains(q)),
+          )
+          .toList();
+    }
 
-    final q = query.toLowerCase();
-
-    return [..._nowShowingMovies, ..._comingSoonMovies]
-        .where(
-          (m) =>
-              m.title.toLowerCase().contains(q) ||
-              m.genres.any((g) => g.toLowerCase().contains(q)),
-        )
+    final response = await _api.get(
+      '/movies/search',
+      queryParams: {'q': query},
+    );
+    final items = response.data['movies'] as List;
+    return items
+        .map((json) => MovieModel.fromJson(json as Map<String, dynamic>))
         .toList();
   }
 }
@@ -50,9 +90,9 @@ final List<MovieModel> _nowShowingMovies = [
     id: 'm1',
     title: 'Kalki 2898 AD',
     posterUrl:
-        'https://upload.wikimedia.org/wikipedia/en/4/4b/Kalki_2898_AD_poster.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/4/4c/Kalki_2898_AD.jpg',
     bannerUrl:
-        'https://upload.wikimedia.org/wikipedia/en/4/4b/Kalki_2898_AD_poster.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/4/4c/Kalki_2898_AD.jpg',
     rating: 8.3,
     votesCount: 142300,
     genres: ['Action', 'Sci-Fi', 'Mythology'],
@@ -83,20 +123,14 @@ final List<MovieModel> _nowShowingMovies = [
         role: 'Actor',
         character: 'Ashwatthama',
       ),
-      const CastMember(
-        id: 'c4',
-        name: 'Nag Ashwin',
-        role: 'Director',
-      ),
+      const CastMember(id: 'c4', name: 'Nag Ashwin', role: 'Director'),
     ],
   ),
   MovieModel(
     id: 'm2',
     title: 'Stree 2',
-    posterUrl:
-        'https://upload.wikimedia.org/wikipedia/en/4/4e/Stree_2_film_poster.jpg',
-    bannerUrl:
-        'https://upload.wikimedia.org/wikipedia/en/4/4e/Stree_2_film_poster.jpg',
+    posterUrl: 'https://upload.wikimedia.org/wikipedia/en/a/a1/Stree_2.jpg',
+    bannerUrl: 'https://upload.wikimedia.org/wikipedia/en/a/a1/Stree_2.jpg',
     rating: 8.7,
     votesCount: 215000,
     genres: ['Horror Comedy', 'Thriller'],
@@ -121,20 +155,16 @@ final List<MovieModel> _nowShowingMovies = [
         role: 'Actress',
         character: 'Stree',
       ),
-      const CastMember(
-        id: 'c7',
-        name: 'Amar Kaushik',
-        role: 'Director',
-      ),
+      const CastMember(id: 'c7', name: 'Amar Kaushik', role: 'Director'),
     ],
   ),
   MovieModel(
     id: 'm3',
     title: 'Pushpa 2: The Rule',
     posterUrl:
-        'https://upload.wikimedia.org/wikipedia/en/4/42/Pushpa_2_The_Rule.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/1/11/Pushpa_2-_The_Rule.jpg',
     bannerUrl:
-        'https://upload.wikimedia.org/wikipedia/en/4/42/Pushpa_2_The_Rule.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/1/11/Pushpa_2-_The_Rule.jpg',
     rating: 8.1,
     votesCount: 189000,
     genres: ['Action', 'Drama', 'Crime'],
@@ -159,18 +189,14 @@ final List<MovieModel> _nowShowingMovies = [
         role: 'Actress',
         character: 'Srivalli',
       ),
-      const CastMember(
-        id: 'c10',
-        name: 'Sukumar',
-        role: 'Director',
-      ),
+      const CastMember(id: 'c10', name: 'Sukumar', role: 'Director'),
     ],
   ),
   MovieModel(
     id: 'm4',
     title: 'Bhool Bhulaiyaa 3',
     posterUrl:
-        'https://upload.wikimedia.org/wikipedia/en/8/88/Bhool_Bhulaiyaa_3_poster.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/e/e4/Bhool_Bhulaiyaa_3_poster.jpg',
     rating: 7.2,
     votesCount: 98000,
     genres: ['Horror', 'Comedy', 'Mystery'],
@@ -195,18 +221,14 @@ final List<MovieModel> _nowShowingMovies = [
         role: 'Actress',
         character: 'Manjulika',
       ),
-      const CastMember(
-        id: 'c13',
-        name: 'Anees Bazmee',
-        role: 'Director',
-      ),
+      const CastMember(id: 'c13', name: 'Anees Bazmee', role: 'Director'),
     ],
   ),
   MovieModel(
     id: 'm5',
     title: 'Fighter',
     posterUrl:
-        'https://upload.wikimedia.org/wikipedia/en/0/08/Fighter_2024_film_poster.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/d/df/Fighter_film_teaser.jpg',
     rating: 7.5,
     votesCount: 77000,
     genres: ['Action', 'Drama'],
@@ -231,11 +253,7 @@ final List<MovieModel> _nowShowingMovies = [
         role: 'Actress',
         character: 'Minal',
       ),
-      const CastMember(
-        id: 'c16',
-        name: 'Siddharth Anand',
-        role: 'Director',
-      ),
+      const CastMember(id: 'c16', name: 'Siddharth Anand', role: 'Director'),
     ],
   ),
 ];
@@ -245,7 +263,7 @@ final List<MovieModel> _comingSoonMovies = [
     id: 'm6',
     title: 'Singham Again',
     posterUrl:
-        'https://upload.wikimedia.org/wikipedia/en/e/e3/Singham_Again_poster.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/0/04/Singham_Again_poster.jpg',
     rating: 0,
     votesCount: 0,
     genres: ['Action', 'Drama'],
@@ -264,18 +282,14 @@ final List<MovieModel> _comingSoonMovies = [
         role: 'Actor',
         character: 'Singham',
       ),
-      const CastMember(
-        id: 'c18',
-        name: 'Rohit Shetty',
-        role: 'Director',
-      ),
+      const CastMember(id: 'c18', name: 'Rohit Shetty', role: 'Director'),
     ],
   ),
   MovieModel(
     id: 'm7',
     title: 'Sky Force',
     posterUrl:
-        'https://upload.wikimedia.org/wikipedia/en/b/b6/Sky_Force_film_poster.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/e/ec/Sky_Force_poster.jpg',
     rating: 0,
     votesCount: 0,
     genres: ['Action', 'War', 'Drama'],
@@ -288,11 +302,7 @@ final List<MovieModel> _comingSoonMovies = [
     releaseDate: DateTime(2025, 1, 24),
     isNowShowing: false,
     cast: [
-      const CastMember(
-        id: 'c19',
-        name: 'Akshay Kumar',
-        role: 'Actor',
-      ),
+      const CastMember(id: 'c19', name: 'Akshay Kumar', role: 'Actor'),
       const CastMember(
         id: 'c20',
         name: 'Abhishek Anil Kapur',
