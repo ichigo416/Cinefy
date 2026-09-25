@@ -44,8 +44,8 @@ class SeatWidget extends StatelessWidget {
         width: 26,
         height: 24,
         decoration: BoxDecoration(
-          color: _color.withOpacity(
-            seat.status == SeatStatus.booked ? 0.35 : 1.0,
+          color: _color.withValues(
+            alpha: seat.status == SeatStatus.booked ? 0.35 : 1.0,
           ),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(5),

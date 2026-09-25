@@ -91,8 +91,8 @@ class _BannerItem extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: movie.bannerUrl!,
               fit: BoxFit.cover,
-              placeholder: (_, __) => Container(color: AppColors.surfaceLight),
-              errorWidget: (_, __, ___) =>
+              placeholder: (_, _) => Container(color: AppColors.surfaceLight),
+              errorWidget: (_, _, _) =>
                   Container(color: AppColors.surfaceLight),
             ),
             // Gradient overlay for text legibility
@@ -103,7 +103,7 @@ class _BannerItem extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.85),
+                    Colors.black.withValues(alpha: 0.85),
                   ],
                   stops: const [0.45, 1.0],
                 ),

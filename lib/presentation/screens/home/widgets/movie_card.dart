@@ -42,12 +42,12 @@ class MovieCard extends StatelessWidget {
             width: AppDimensions.movieCardWidth,
             height: AppDimensions.movieCardHeight,
             fit: BoxFit.cover,
-            placeholder: (_, __) => const ShimmerWidget(
+            placeholder: (_, _) => const ShimmerWidget(
               width: AppDimensions.movieCardWidth,
               height: AppDimensions.movieCardHeight,
               borderRadius: AppDimensions.radiusM,
             ),
-            errorWidget: (_, __, ___) => _posterFallback(),
+            errorWidget: (_, _, _) => _posterFallback(),
           ),
         ),
         // Certification badge
@@ -110,7 +110,7 @@ class _CertBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.7),
+        color: Colors.black.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
@@ -148,7 +148,7 @@ class _RatingBar extends StatelessWidget {
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
           colors: [
-            Colors.black.withOpacity(0.85),
+            Colors.black.withValues(alpha: 0.85),
             Colors.transparent,
           ],
         ),

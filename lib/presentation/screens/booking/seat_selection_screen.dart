@@ -114,7 +114,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
               gradient: LinearGradient(
                 colors: [
                   Colors.transparent,
-                  AppColors.textHint.withOpacity(0.6),
+                  AppColors.textHint.withValues(alpha: 0.6),
                   Colors.transparent,
                 ],
               ),
@@ -227,7 +227,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, -4),
           ),

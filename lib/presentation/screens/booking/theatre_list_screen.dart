@@ -90,7 +90,7 @@ class _TheatreListScreenState extends State<TheatreListScreen> {
                   return ListView.separated(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     itemCount: state.theatres.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (_, _) =>
                         const Divider(height: 1, color: AppColors.divider),
                     itemBuilder: (_, i) => _TheatreCard(
                       theatre: state.theatres[i],
@@ -117,7 +117,7 @@ class _TheatreListScreenState extends State<TheatreListScreen> {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         itemCount: _dateOptions.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (_, i) {
           final date = _dateOptions[i];
           final isSelected = _isSameDay(date, _selectedDate);

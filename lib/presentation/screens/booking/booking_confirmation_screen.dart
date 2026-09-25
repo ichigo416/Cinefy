@@ -78,7 +78,7 @@ class _BookingConfirmationScreenState
           width: 72,
           height: 72,
           decoration: BoxDecoration(
-            color: AppColors.green.withOpacity(0.15),
+            color: AppColors.green.withValues(alpha: 0.15),
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.green, width: 2),
           ),
@@ -211,7 +211,7 @@ class _BookingConfirmationScreenState
           border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
@@ -277,10 +277,10 @@ class _BookingConfirmationScreenState
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.12),
+                    color: AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                        color: AppColors.primary.withOpacity(0.3)),
+                        color: AppColors.primary.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

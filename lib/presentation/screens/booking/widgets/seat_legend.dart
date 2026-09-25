@@ -38,7 +38,7 @@ class _LegendItem extends StatelessWidget {
           width: 20,
           height: 18,
           decoration: BoxDecoration(
-            color: color.withOpacity(color == AppColors.seatBooked ? 0.35 : 1),
+            color: color.withValues(alpha: color == AppColors.seatBooked ? 0.35 : 1),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(4),
               topRight: Radius.circular(4),
